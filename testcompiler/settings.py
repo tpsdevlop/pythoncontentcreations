@@ -66,6 +66,17 @@ AZURE_ACCOUNT_NAME = 'storeholder'
 AZURE_ACCOUNT_KEY = 'QxlUJdp8eSoPeQPas4NigSkXg6KMep7z+fPQ5CpPm0kRfjg7Q0lFmVEIyhU4ohFLFdSqntDAG6MY84elTfecnw=='
 AZURE_CONTAINER = 'tpdata'
 
+AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
+
+# Set the custom domain for the storage account
+AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
+
+# Set the default ACL to 'private'
+AZURE_DEFAULT_ACL = 'private'
+
+# Set the location for MCQ files
+MCQ_FOLDER = 'MCQ/'
+
 ROOT_URLCONF = 'testcompiler.urls'
 CORS_ALLOW_ALL_ORIGINS = True  # Allow all origins for testing. Consider restricting in production.
 

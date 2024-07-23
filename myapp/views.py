@@ -18,7 +18,7 @@ from django.template import Template, Context
 blob_service_client = BlobServiceClient(account_url=f"https://{settings.AZURE_ACCOUNT_NAME}.blob.core.windows.net", credential=settings.AZURE_ACCOUNT_KEY)
 
 # Get a reference to the container
-container_client = blob_service_client.get_container_client(settings.AZURE_CONTAINER)
+container_client = blob_service_client.get_container_client('devlop')
 
 @require_POST
 @csrf_exempt
