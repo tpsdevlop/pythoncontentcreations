@@ -1,10 +1,12 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 from test1 import views
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('',include('myapp.urls')),
+    path('', views.home, name='home'),
     path('api/save-json', views.save_json, name='save_json'),
     path('files/<str:concept>/<str:filename>', views.get_file, name='get_file'),
     path('user/<str:email>', views.check_email, name='check_email'),

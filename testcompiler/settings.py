@@ -40,10 +40,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'test1',
+    'myapp',
+    'storages', 
 ]
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000', 
-    'https://pythoncontentcreation.azurewebsites.net/',
+    # 'https://pythoncontentcreation.azurewebsites.net/',
 ]
 CSRF_TRUSTED_ORIGINS=['https://pythoncontentcreation.azurewebsites.net/']
 

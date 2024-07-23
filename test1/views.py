@@ -202,3 +202,6 @@ def file_content(request, folder_name, filename):
             return HttpResponseNotFound('File not found')
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
+    
+def home(request):
+    return HttpResponse('welcome to home page')
