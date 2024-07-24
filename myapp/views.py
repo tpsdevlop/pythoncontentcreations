@@ -343,7 +343,18 @@ class RenderTemplateView(View):
 class QuestionView(View):
     def post(self, request):
         try:
-            data = json.loads(request.body)
+            # Initialize an empty dictionary to store our data
+            data = {}
+            
+            # Iterate through all fields in the request
+            for key in request.POST.keys():
+                try:
+                    # Try to parse the value as JSON
+                    data[key] = json.loads(request.POST[key])
+                except json.JSONDecodeError:
+                    # If it's not valid JSON, just use the raw string
+                    data[key] = request.POST[key]
+            
             question_type = data.get('type', 'unknown')
             
             # Transform the data based on question type
@@ -353,17 +364,33 @@ class QuestionView(View):
             filename = f"{question_type}_{int(time.time())}.json"
             blob_name = f"{settings.MCQ_FOLDER}{filename}"
             
-            # Create a blob client
-            blob_client = container_client.get_blob_client(blob_name)
+            # Create a blob service client
+            
             
             # Upload the JSON data to the blob
+            blob_client = container_client.get_blob_client(blob_name)
             blob_client.upload_blob(json.dumps(transformed_data, indent=2), overwrite=True)
             
+            # Handle media file upload
+            if 'mediaFile' in request.FILES:
+                media_file = request.FILES['mediaFile']
+                media_blob_name = f"{settings.MCQ_FOLDER}media/{filename}_{media_file.name}"
+                media_blob_client = container_client.get_blob_client(media_blob_name)
+                media_blob_client.upload_blob(media_file.read(), overwrite=True)
+                
+                # Update the transformed data with the media URL
+                transformed_data['QnPh'] = {
+                    'type': data.get('mediaType', ''),
+                    'url': media_blob_client.url
+                }
+                
+                # Update the JSON blob with the new media information
+                blob_client.upload_blob(json.dumps(transformed_data, indent=2), overwrite=True)
+            
             return JsonResponse({"message": "Question saved successfully", "id": filename}, status=201)
-        except json.JSONDecodeError:
-            return JsonResponse({"error": "Invalid JSON data"}, status=400)
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)
+
 
     def get(self, request, question_id=None):
         if question_id:
